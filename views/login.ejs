@@ -13,7 +13,19 @@
  <div class="center">
   <h1>Login</h1>
 
-  <form action="/user/login" method="post">
+  <ul>
+   <% if (messages.success_msg) { %>
+   <li> <%= messages.success_msg %> </li>
+   <% } %>
+  </ul>
+
+  <ul>
+   <% if (messages.error) { %>
+   <li> <%= messages.error %> </li>
+   <% } %>
+  </ul>
+
+  <form action="/users/login" method="post">
    <div>
     <input type="email" id="email" name="email" placeholder="Email" required>
    </div>
