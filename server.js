@@ -12,10 +12,6 @@ initializePassport(passport)
 
 const PORT = process.env.PORT || 4000
 
-require('dotenv').config()
-const isProduction = process.env.NODE_ENV === 'prodcution'
-console.log("NO TO JEST PRODUKCJA", process.env.NODE_ENV, isProduction)
-
 app.use(express.urlencoded({ extended: false }))
 app.set('view engine', 'ejs')
 app.use(express.static(path.join(__dirname, 'public')))
