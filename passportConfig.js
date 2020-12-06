@@ -10,12 +10,15 @@ function initialize(passport) {
    `SELECT * FROM users WHERE email = $1`,
    [`{${email}}`],
    (err, results) => {
-    if (err) console.log(err)
+    if (err) console.log('Long', err)
+
+    console.log(JSON.stringify(results.rows))
 
     if (results.rows.length > 0) {
      const user = results.rows[0]
      bcrypt.compare(password, user.password.toString(), (err, isMatch) => {
-      if (err) console.log(err)
+      if (err) console.log('Bcrypt', err)
+
       if (isMatch) {
        return done(null, user)
       } else {
