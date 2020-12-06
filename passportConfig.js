@@ -8,22 +8,14 @@ function initialize(passport) {
  const authenticateUser = (email, password, done) => {
   pool.query(
    `SELECT * FROM users WHERE email = $1`,
-   [email],
+   [`{${email}}`],
    (err, results) => {
-    if (err) {
-     throw err
-    }
-
-    console.log(results.rows)
+    if (err) console.log(err)
 
     if (results.rows.length > 0) {
      const user = results.rows[0]
-
-     bcrypt.compare(password, user.password, (err, isMatch) => {
-      if (err) {
-       throw err
-      }
-
+     bcrypt.compare(password, user.password.toString(), (err, isMatch) => {
+      if (err) console.log(err)
       if (isMatch) {
        return done(null, user)
       } else {
@@ -49,9 +41,7 @@ function initialize(passport) {
 
  passport.deserializeUser((id, done) => {
   pool.query(`SELECT * FROM users WHERE id = $1`, [id], (err, results) => {
-   if (err) {
-    throw err
-   }
+   if (err) console.log(err)
    console.log(`ID is ${results.rows[0].id}`);
    return done(null, results.rows[0])
   })

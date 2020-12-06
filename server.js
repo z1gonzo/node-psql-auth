@@ -78,21 +78,20 @@ app.post('/users/register', async (req, res) => {
 
   pool.query(
    `SELECT * FROM users
-   WHERE email = $1`, [email], (err, results) => {
-   if (err) { throw err }
-
-   console.log(results.rows)
+   WHERE email = $1`, [`{${email}}`], (err, results) => {
+   if (err) { console.log("Cos sie popsulo", err) }
+   console.log('Tutaj', results.rows)
 
    if (results.rows.length > 0) {
     errors.push({ message: 'Email already registered' })
     res.render('register', { errors })
    } else {
     pool.query(
-     `INSERT INTO users (name, email, password)
-     VALUES ($1, $2, $3)
-     RETURNING id, password`, [name, email, hashedPassword], (err, results) => {
-     if (err) { throw err }
-     console.log(results.rows)
+     `INSERT INTO users(name, email, password)
+       VALUES($1, $2, $3)
+       RETURNING id, password`, [`{${name}}`, `{${email}}`, `{${hashedPassword}}`], (err, results) => {
+     if (err) console.log('Err insert', err)
+     console.log(results)
      req.flash('success_msg', 'You are now registered. Please log in.')
      res.redirect('/users/login')
     }
